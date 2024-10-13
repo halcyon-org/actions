@@ -34,7 +34,14 @@ jobs:
             const description = selectedVideo.description;
 
             // Construct the comment body
-            const body = `Here is a random video for you! 🎥\n\n[${title}](${videoUrl})\n${description}\n![Thumbnail](${imageUrl})\n\n`;
+            const body = `\
+            Here is a random video for you! 🎥
+
+            ## ${title}
+            > ${description}
+
+            [![Thumbnail](${imageUrl})](${videoUrl})\
+            `;
 
             // Post the comment on the pull request
             github.rest.issues.createComment({
