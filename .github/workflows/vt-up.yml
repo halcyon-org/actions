@@ -1,0 +1,45 @@
+name: vt up ci
+
+on:
+  workflow_call:
+    inputs:
+      member:
+        type: string
+        required: true
+
+jobs:
+  post-random-video:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Post PR comment with random video
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const ENDPOINT = 'https://vt.imgs.shiron.dev/${{ inputs.member }}';
+
+            // Fetch the JSON from the API endpoint
+            const response = await fetch(`${ENDPOINT}/thumbnails.json`);
+            const data = await response.json();
+
+            // Select a random video
+            const videos = data.videos;
+            const randomIndex = Math.floor(Math.random() * videos.length);
+            const selectedVideo = videos[randomIndex];
+
+            // Prepare the URL and thumbnail with encoding
+            const imageUrl = `${ENDPOINT}/${selectedVideo.thumbnail}`;
+            const videoUrl = selectedVideo.url;
+            const title = selectedVideo.title;
+            const description = selectedVideo.description;
+
+            // Construct the comment body
+            const body = `Here is a random video for you! 🎥\n\n[${title}](${videoUrl})\n${description}\n![Thumbnail](${imageUrl})\n\n`;
+
+            // Post the comment on the pull request
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
