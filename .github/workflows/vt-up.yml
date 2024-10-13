@@ -34,9 +34,8 @@ jobs:
             Here is a random video for you! 🎥
 
             ## ${title}
-            > ${description}
-
-            [![Thumbnail](${imageUrl})](${videoUrl})\
+            [![Thumbnail](${imageUrl})](${videoUrl})
+            > ${description}\
             `;
 
             github.rest.issues.createComment({
