@@ -1,0 +1,11 @@
+name: vt up ci
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  vt-up:
+    uses: ./.github/workflows/vt-up.yml
+    with:
+      member: aichannel

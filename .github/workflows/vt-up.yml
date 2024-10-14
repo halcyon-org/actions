@@ -1,4 +1,4 @@
-name: vt up ci
+name: vt up
 
 on:
   workflow_call:
