@@ -1,4 +1,4 @@
-name: vt up ci
+name: CI on PR Opened
 
 on:
   pull_request:
@@ -6,6 +6,10 @@ on:
 
 jobs:
   vt-up:
-    uses: ./.github/workflows/vt-up.yml
-    with:
-      member: aichannel
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./vt-up
+        with:
+          member: kizunaai

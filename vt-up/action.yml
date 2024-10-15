@@ -1,0 +1,43 @@
+name: VT Up
+description: Comment a random video to watch while CI is running
+
+inputs:
+  member:
+    description: Whose video to choose
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Post PR comment with random video
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const endpoint = "https://vt.imgs.shiron.dev/${{ inputs.member }}";
+
+          const response = await fetch(`${endpoint}/thumbnails.json`);
+          const data = await response.json();
+
+          const videos = data.videos;
+          const randomIndex = Math.floor(Math.random() * videos.length);
+          const selectedVideo = videos[randomIndex];
+
+          const imageUrl = `${endpoint}/${selectedVideo.thumbnail}`;
+          const videoUrl = selectedVideo.url;
+          const title = selectedVideo.title;
+          const description = selectedVideo.description;
+
+          const body = `\
+          Here is a random video for you! 🎥
+
+          ## ${title}
+          [![Thumbnail](${imageUrl})](${videoUrl})
+          > ${description}\
+          `;
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: body
+          });
