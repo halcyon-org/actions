@@ -32,10 +32,13 @@ runs:
 
           ## ${title}
           [![Thumbnail](${imageUrl})](${videoUrl})
+          <details><summary>Show more</summary>
+
           ${description
             .split("\n")
             .map((line) => `> ${line}`)
-            .join("\n")}\
+            .join("\n")}
+          </details>\
           `;
 
           github.rest.issues.createComment({
