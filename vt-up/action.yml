@@ -32,7 +32,10 @@ runs:
 
           ## ${title}
           [![Thumbnail](${imageUrl})](${videoUrl})
-          > ${description}\
+          ${description
+            .split("\n")
+            .map((line) => `> ${line}`)
+            .join("\n")}\
           `;
 
           github.rest.issues.createComment({
